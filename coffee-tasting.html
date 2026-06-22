@@ -26,6 +26,7 @@
     font-family: 'Tajawal', sans-serif;
     color: var(--deep);
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* ── HEADER ── */
@@ -538,7 +539,7 @@
   }
   .cmp-name { font-family:'Playfair Display',serif; color:var(--cream); font-size:0.95rem; font-weight:700; text-align:center; }
   .cmp-score { font-size:1.8rem; color:var(--gold); font-family:'Playfair Display',serif; font-weight:700; }
-  .cmp-info  { font-size:0.72rem; color:var(--mid); text-align:center; line-height:1.6; }
+  .cmp-info  { font-size:0.72rem; color:#C4A882; text-align:center; line-height:1.6; }
   .arch-compare-bar {
     display: none;
     background: rgba(200,134,58,0.12);
@@ -697,11 +698,28 @@
   }
 
   @media print {
-    body { background: white; }
-    .actions, .archive-overlay, .toast, .cmp-overlay, .wheel-wrap, section.full:not(:last-of-type) + section { display: none; }
-    .archive-overlay, .toast, .cmp-overlay { display: none !important; }
-    section { box-shadow: none; }
-    .radar-svg { max-width: 220px; }
+    body { background: white; color: #1A0F08; }
+    /* hide interactive & navigation elements */
+    .actions, .archive-overlay, .toast, .cmp-overlay { display: none !important; }
+    /* hide interactive sections — keep info, notes, summary */
+    #sec-sliders, #sec-wheel, #sec-body { display: none !important; }
+    /* hide chips and dot rows inside descriptors — keep textareas */
+    #sec-desc .intensity-row,
+    #sec-desc .flavor-chips,
+    #sec-desc .wheel-wrap,
+    #sec-desc .field-grid { display: none !important; }
+    /* summary section — force light bg for print */
+    #sec-summary { background: #f8f0e3 !important; color: #1A0F08 !important; }
+    .sum-coffee-name, .sum-desc-text, .sum-notes { color: #1A0F08 !important; }
+    .sum-tag { border-color: #C8863A; }
+    .sum-divider { border-color: #e0c8a0; }
+    .sum-footer { color: #8B5E3C; }
+    /* page breaks */
+    section { box-shadow: none; page-break-inside: avoid; }
+    header { page-break-after: avoid; }
+    #sec-summary { page-break-before: auto; }
+    /* radar */
+    .radar-svg { max-width: 200px; }
   }
 </style>
 </head>
@@ -715,7 +733,7 @@
 <main>
 
   <!-- INFO -->
-  <section class="full">
+  <section class="full" id="sec-info">
     <div class="sec-label">معلومات القهوة</div>
     <div class="field-grid">
       <div class="field">
@@ -885,12 +903,11 @@
           </optgroup>
         </select>
       </div>
-      </div>
     </div>
   </section>
 
   <!-- SLIDERS: CUPPING SCORES -->
-  <section>
+  <section id="sec-sliders">
     <div class="sec-label">درجات التقييم SCA</div>
 
     <div class="slider-row">
@@ -936,7 +953,7 @@
   </section>
 
   <!-- FLAVOR WHEEL -->
-  <section>
+  <section id="sec-wheel">
     <div class="sec-label">عجلة النكهات</div>
     <div class="wheel-wrap">
       <svg class="wheel-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" id="flavorWheel" tabindex="-1">
@@ -948,7 +965,7 @@
   </section>
 
   <!-- BODY & ACIDITY -->
-  <section>
+  <section id="sec-body">
     <div class="sec-label">الحموضة والقوام</div>
 
     <div style="margin-bottom:1.2rem">
@@ -988,7 +1005,7 @@
   </section>
 
   <!-- DESCRIPTORS -->
-  <section>
+  <section id="sec-desc">
     <div class="sec-label">الأوصاف التفصيلية</div>
 
     <div class="intensity-row">
@@ -1067,7 +1084,7 @@
   </section>
 
   <!-- NOTES -->
-  <section class="full">
+  <section class="full" id="sec-notes">
     <div class="sec-label">ملاحظات التذوق التفصيلية</div>
     <div class="field-grid">
       <div class="field">
@@ -1103,7 +1120,7 @@
   </section>
 
   <!-- LIVE SUMMARY -->
-  <section class="full" style="background:var(--deep);border-color:var(--dark);">
+  <section class="full" id="sec-summary" style="background:var(--deep);border-color:var(--dark);">
     <div class="sec-label" style="color:var(--gold)">بيان التذوق الرسمي</div>
     <div id="sumContainer" class="sum-card"></div>
   </section>
@@ -1152,7 +1169,10 @@
   <div class="cmp-box">
     <div class="cmp-header">
       <span class="cmp-title">مقارنة التذوقات</span>
-      <button class="archive-close" onclick="closeCmp()">✕</button>
+      <div style="display:flex;gap:0.6rem;align-items:center">
+        <button onclick="closeCmp();openArchive()" style="font-size:0.78rem;background:none;border:1px solid rgba(200,134,58,0.4);color:var(--gold);padding:0.3rem 0.7rem;border-radius:6px;cursor:pointer;font-family:Tajawal,sans-serif">← الأرشيف</button>
+        <button class="archive-close" onclick="closeCmp()">✕</button>
+      </div>
     </div>
     <div class="cmp-grid" id="cmpGrid"></div>
   </div>
@@ -1380,6 +1400,7 @@ function clearAll(){
   currentEntryId = null;
   clearDraft();
   updateScore();
+  buildSummary();
 }
 
 /* ── RADAR CHART ── */
@@ -1391,23 +1412,34 @@ function drawRadar(svgEl, vals, color){
   const NS='http://www.w3.org/2000/svg';
   const cx=110, cy=110, r=78, n=6;
   const TAU=Math.PI*2;
-  const mk=(tag,attrs)=>{ const el=document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); return el; };
+  const mk=(tag,attrs,txt)=>{ const el=document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); if(txt!==undefined) el.textContent=txt; return el; };
   const pt=(rv,i)=>{ const a=(i/n)*TAU-Math.PI/2; return [cx+rv*Math.cos(a), cy+rv*Math.sin(a)]; };
+
+  // grid rings
   for(let ring=1;ring<=5;ring++){
     const pts=Array.from({length:n},(_,i)=>pt(r*ring/5,i).join(',')).join(' ');
-    svgEl.appendChild(mk('polygon',{points:pts,fill:'none',stroke:'rgba(200,134,58,0.12)','stroke-width':'1'}));
+    svgEl.appendChild(mk('polygon',{points:pts,fill:'none',stroke:'rgba(200,134,58,'+(ring===5?'0.25':'0.10')+')',  'stroke-width': ring===5?'1.5':'1'}));
   }
+  // axis lines + labels
   for(let i=0;i<n;i++){
     const [x2,y2]=pt(r,i);
     svgEl.appendChild(mk('line',{x1:cx,y1:cy,x2,y2,stroke:'rgba(200,134,58,0.18)','stroke-width':'1'}));
     const [lx,ly]=pt(r+18,i);
-    const t=mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'9.5','font-family':'Tajawal,sans-serif',fill:'#8B5E3C'});
-    t.textContent=RADAR_AXES[i]; svgEl.appendChild(t);
+    svgEl.appendChild(mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'9.5','font-family':'Tajawal,sans-serif',fill:'#8B5E3C'},RADAR_AXES[i]));
   }
+  // center dot
+  svgEl.appendChild(mk('circle',{cx,cy,r:'3',fill:'rgba(200,134,58,0.3)'}));
+
+  // data polygon — skip if all zero
   const v=Array.isArray(vals)?vals:Array(n).fill(0);
-  const dpts=v.map((val,i)=>pt(r*Math.max(0,Math.min(5,val||0))/5,i).join(',')).join(' ');
-  svgEl.appendChild(mk('polygon',{points:dpts,fill:color||'rgba(200,134,58,0.22)',stroke:color||'#C8863A','stroke-width':'2','stroke-linejoin':'round'}));
-  v.forEach((val,i)=>{ const [x,y]=pt(r*Math.max(0,Math.min(5,val||0))/5,i); svgEl.appendChild(mk('circle',{cx:x,cy:y,r:'3.5',fill:color||'#C8863A'})); });
+  const hasData=v.some(x=>x>0);
+  if(hasData){
+    const dpts=v.map((val,i)=>pt(r*Math.max(0,Math.min(5,val||0))/5,i).join(',')).join(' ');
+    svgEl.appendChild(mk('polygon',{points:dpts,fill:color?color.replace(')',',0.18)').replace('rgb','rgba'):'rgba(200,134,58,0.18)',stroke:color||'#C8863A','stroke-width':'2','stroke-linejoin':'round'}));
+    v.forEach((val,i)=>{
+      if(val>0){ const [x,y]=pt(r*Math.min(5,val)/5,i); svgEl.appendChild(mk('circle',{cx:x,cy:y,r:'3.5',fill:color||'#C8863A'})); }
+    });
+  }
 }
 
 /* ── LIVE SUMMARY ── */
@@ -1592,26 +1624,36 @@ function applyState(st){
 
 function saveEntry(){
   const st=collectState();
-  const nameEl=document.querySelector('input[type="text"]');
-  const title=(nameEl&&nameEl.value.trim())||'تذوق بدون اسم';
+  const inputs=document.querySelectorAll('input[type="text"]');
+  const selects=document.querySelectorAll('select');
+  const title=(inputs[0]?.value.trim())||'تذوق بدون اسم';
   const score=document.getElementById('totalScore').textContent||'—';
   const stamp=fmtNow();
+  // meta: human-readable key fields for comparison display
+  const meta={
+    origin:   inputs[1]?.value.trim()||'',
+    roaster:  inputs[2]?.value.trim()||'',
+    process:  selects[0]?.value||'',
+    roast:    selects[1]?.value||'',
+    brew:     document.getElementById('brewMethod')?.value||'',
+    variety:  document.getElementById('beanVariety')?.value||'',
+    altitude: inputs[3]?.value.trim()||'',
+  };
   let arr=loadArchive();
-  // update the currently-open entry instead of creating a duplicate
   if(currentEntryId!=null){
     const idx=arr.findIndex(e=>e.id===currentEntryId);
     if(idx>=0){
-      arr[idx]={ id:currentEntryId, title, score, dateLabel:stamp, state:st };
+      arr[idx]={ id:currentEntryId, title, score, dateLabel:stamp, meta, state:st };
       const ok=persistArchive(arr);
-      toast(ok?'تم تحديث التذوق ✓':'حُدّث مؤقتاً (التخزين الدائم ممنوع) — صدّر نسخة احتياطية', !ok);
+      toast(ok?'تم تحديث التذوق ✓':'حُدّث مؤقتاً — صدّر نسخة احتياطية', !ok);
       return;
     }
   }
-  const entry={ id:Date.now(), title, score, dateLabel:stamp, state:st };
+  const entry={ id:Date.now(), title, score, dateLabel:stamp, meta, state:st };
   currentEntryId=entry.id;
   arr.unshift(entry);
   const ok=persistArchive(arr);
-  toast(ok?'تم حفظ التذوق في الأرشيف ✓':'حُفظ مؤقتاً (التخزين الدائم ممنوع) — صدّر نسخة احتياطية', !ok);
+  toast(ok?'تم حفظ التذوق في الأرشيف ✓':'حُفظ مؤقتاً — صدّر نسخة احتياطية', !ok);
 }
 
 /* ── BACKUP: works fully offline, no storage permission needed ── */
@@ -1654,7 +1696,8 @@ function renderArchive(){
   arr.forEach(en=>{
     const item=document.createElement('div'); item.className='arch-item';
     // checkbox for comparison
-    const chk=document.createElement('input'); chk.type='checkbox'; chk.className='arch-check'; chk.dataset.id=en.id;
+    const chk=document.createElement('input'); chk.type='checkbox'; chk.className='arch-check';
+    chk.dataset.id=en.id; chk.setAttribute('aria-label','اختر للمقارنة: '+en.title);
     chk.addEventListener('change',updateCompareBar);
     const sc=document.createElement('div'); sc.className='arch-score'; sc.textContent=en.score||'—';
     const meta=document.createElement('div'); meta.className='arch-meta';
@@ -1701,21 +1744,21 @@ function runComparison(){
   if(!a||!b) return;
   const grid=document.getElementById('cmpGrid');
   grid.innerHTML='';
+  const colors=['#C8863A','#4A9A4A'];
   [a,b].forEach((en,idx)=>{
-    const color=idx===0?'#C8863A':'#5BA85A';
+    const color=colors[idx];
+    const m=en.meta||{};
+    const metaLines=[m.origin,m.variety,m.process,m.roast,m.brew].filter(Boolean).join(' · ');
     const card=document.createElement('div'); card.className='cmp-card';
     card.innerHTML=`
       <div class="cmp-name">${en.title}</div>
       <div class="cmp-score">${en.score||'—'}</div>
+      ${metaLines?`<div class="cmp-info">${metaLines}</div>`:''}
+      ${m.altitude?`<div class="cmp-info">⛰ ${m.altitude} م</div>`:''}
       <div class="cmp-info">${en.dateLabel}</div>
-      <svg class="radar-svg" viewBox="0 0 220 220" id="cmpRadar${idx}" style="max-width:200px"></svg>
-      ${en.state?.dots?.acidInt>0?`<div class="cmp-info" style="margin-top:0.3rem;direction:rtl">
-        حموضة: ${en.state.dots.acidInt||0}/٥ &nbsp;|&nbsp; قوام: ${en.state.dots.bodyInt||0}/٥<br>
-        حلاوة: ${en.state.dots.sweet||0}/٥ &nbsp;|&nbsp; نظافة: ${en.state.dots.clean||0}/٥
-      </div>`:''}
+      <svg class="radar-svg" viewBox="0 0 220 220" style="max-width:190px;margin-top:0.5rem"></svg>
     `;
     grid.appendChild(card);
-    // draw radar after appending
     const svgEl=card.querySelector('svg');
     const d=en.state?.dots||{};
     drawRadar(svgEl,[d.acidInt||0,d.bodyInt||0,d.sweet||0,d.bitter||0,d.astringent||0,d.clean||0],color);
@@ -1739,7 +1782,7 @@ function closeArchive(){ document.getElementById('archiveOverlay').classList.rem
 
 let _toastTimer;
 function toast(msg, warn){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.toggle('warn', !!warn); el.classList.add('show'); clearTimeout(_toastTimer); _toastTimer=setTimeout(()=>el.classList.remove('show'), 3400); }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeArchive(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeArchive(); closeCmp(); } });
 
 // throttle summary rebuilds to one per frame (smooth slider dragging)
 let _summaryRAF = null;
