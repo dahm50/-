@@ -170,7 +170,7 @@
     background: var(--light);
     outline: none;
     cursor: pointer;
-    touch-action: pan-y;
+    touch-action: none;
   }
 
   input[type="range"]::-webkit-slider-thumb {
@@ -218,7 +218,27 @@
     gap: 1.2rem;
   }
 
-  .wheel-svg { max-width: 300px; width: 100%; }
+  .wheel-svg {
+    max-width: 340px;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .wheel-svg path, .wheel-svg circle {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  #wheelLabel {
+    font-size: 0.82rem;
+    color: var(--gold);
+    font-weight: 600;
+    text-align: center;
+    min-height: 1.4em;
+    letter-spacing: 0.02em;
+  }
 
   .flavor-chips {
     display: flex;
@@ -238,6 +258,8 @@
     user-select: none;
     color: var(--mid);
     font-weight: 500;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .chip.active {
@@ -257,6 +279,17 @@
 
   .int-label { font-size: 0.8rem; color: var(--mid); width: 80px; text-align: right; flex-shrink: 0; }
 
+  .dot-label {
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 600;
+    min-height: 1em;
+    display: block;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+    transition: opacity 0.15s;
+  }
+
   .int-dots {
     display: flex;
     gap: 5px;
@@ -272,6 +305,8 @@
     transition: all 0.15s;
     background: white;
     flex-shrink: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .dot.filled { background: var(--gold); border-color: var(--gold); }
@@ -300,6 +335,8 @@
     color: white;
     opacity: 0.55;
     transition: opacity 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .acid-seg.sel { opacity: 1; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5); }
@@ -318,6 +355,8 @@
     color: var(--light);
     transition: color 0.15s, transform 0.15s;
     user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .star.lit { color: var(--gold); }
@@ -330,6 +369,191 @@
     color: var(--mid);
     min-height: 1.4em;
   }
+
+  /* ── SUMMARY CARD ── */
+  .sum-card { display:flex; flex-direction:column; gap:1.1rem; }
+
+  .sum-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .sum-coffee-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--cream);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .sum-coffee-sub {
+    font-size: 0.8rem;
+    color: var(--mid);
+    margin-top: 0.28rem;
+    letter-spacing: 0.02em;
+  }
+  .sum-score-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(200,134,58,0.1);
+    border: 1.5px solid rgba(200,134,58,0.55);
+    border-radius: 10px;
+    padding: 0.55rem 1rem 0.45rem;
+    flex-shrink: 0;
+    min-width: 72px;
+  }
+  .sum-score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .sum-score-denom {
+    font-size: 0.58rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+  .sum-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .sum-tag {
+    background: rgba(200,134,58,0.1);
+    border: 1px solid rgba(200,134,58,0.28);
+    color: var(--cream);
+    font-size: 0.76rem;
+    padding: 0.22rem 0.65rem;
+    border-radius: 20px;
+  }
+  .sum-divider {
+    border: none;
+    border-top: 1px solid var(--dark);
+    margin: 0;
+  }
+  .sum-sec-title {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+  }
+  .sum-desc-item { margin-bottom: 0.55rem; }
+  .sum-desc-label { font-size: 0.7rem; color: var(--mid); font-weight: 600; margin-bottom: 0.12rem; }
+  .sum-desc-text { font-size: 0.9rem; color: var(--cream); line-height: 1.75; }
+
+  .sum-qual-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.42rem;
+  }
+  .sum-qual-label { font-size: 0.76rem; color: var(--mid); width: 95px; text-align: right; flex-shrink: 0; }
+  .sum-dots-row { display:flex; gap:4px; flex:1; }
+  .sum-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: rgba(200,134,58,0.15);
+    border: 1px solid rgba(200,134,58,0.25);
+    flex-shrink: 0;
+  }
+  .sum-dot.on { background: var(--gold); border-color: var(--gold); }
+
+  .sum-chips-row { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .sum-chip {
+    background: rgba(200,134,58,0.14);
+    border: 1px solid rgba(200,134,58,0.35);
+    color: var(--gold);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .sum-defect {
+    background: rgba(155,61,46,0.15);
+    border: 1px solid rgba(155,61,46,0.4);
+    border-radius: 8px;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8rem;
+    color: #e07865;
+  }
+  .sum-overall { display:flex; align-items:center; gap:0.9rem; }
+  .sum-stars { font-size: 1.2rem; color: var(--gold); letter-spacing: 3px; }
+  .sum-verdict {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    font-weight: 700;
+  }
+  .sum-notes {
+    font-size: 0.87rem;
+    color: var(--cream);
+    line-height: 1.85;
+    border-right: 2px solid rgba(200,134,58,0.5);
+    padding-right: 0.85rem;
+  }
+  .sum-footer {
+    font-size: 0.67rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--dark);
+  }
+
+  /* ── RADAR CHART ── */
+  .radar-wrap { display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-top:0.5rem; }
+  .radar-svg  { width:100%; max-width:260px; }
+  .radar-axis-label { font-size:9px; font-family:'Tajawal',sans-serif; fill:var(--mid); }
+  .radar-axis-label-bold { fill:var(--cream); font-weight:700; }
+
+  /* ── COMPARISON MODAL ── */
+  .cmp-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,5,2,0.88); z-index: 200;
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .cmp-overlay.open { display: flex; }
+  .cmp-box {
+    background: var(--dark); border-radius: 16px;
+    padding: 1.4rem; width: 100%; max-width: 760px;
+    max-height: 90vh; overflow-y: auto;
+    border: 1px solid rgba(200,134,58,0.2);
+  }
+  .cmp-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem;
+  }
+  .cmp-title { font-family:'Playfair Display',serif; color:var(--cream); font-size:1.1rem; font-weight:700; }
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .cmp-card {
+    background: var(--deep); border-radius: 12px; padding: 1rem;
+    border: 1px solid rgba(200,134,58,0.15);
+    display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+  }
+  .cmp-name { font-family:'Playfair Display',serif; color:var(--cream); font-size:0.95rem; font-weight:700; text-align:center; }
+  .cmp-score { font-size:1.8rem; color:var(--gold); font-family:'Playfair Display',serif; font-weight:700; }
+  .cmp-info  { font-size:0.72rem; color:var(--mid); text-align:center; line-height:1.6; }
+  .arch-compare-bar {
+    display: none;
+    background: rgba(200,134,58,0.12);
+    border: 1px solid rgba(200,134,58,0.4);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    margin: 0.5rem 0;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--dark);
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .arch-compare-bar.visible { display: flex; }
+  .arch-check { width:18px; height:18px; accent-color:var(--gold); cursor:pointer; }
 
   /* ── PRINT / SAVE ── */
   .actions {
@@ -473,9 +697,10 @@
 
   @media print {
     body { background: white; }
-    .actions { display: none; }
-    .archive-overlay, .toast { display: none !important; }
+    .actions, .archive-overlay, .toast, .cmp-overlay, .wheel-wrap, section.full:not(:last-of-type) + section { display: none; }
+    .archive-overlay, .toast, .cmp-overlay { display: none !important; }
     section { box-shadow: none; }
+    .radar-svg { max-width: 220px; }
   }
 </style>
 </head>
@@ -539,6 +764,127 @@
         <label>تاريخ التذوق</label>
         <input type="date">
       </div>
+      <div class="field">
+        <label>طريقة التحضير</label>
+        <select id="brewMethod">
+          <option value="">اختر...</option>
+          <option>كابينج (Cupping)</option>
+          <option>V60</option>
+          <option>كيميكس (Chemex)</option>
+          <option>كالتا ويف (Kalita Wave)</option>
+          <option>فرنش برس (French Press)</option>
+          <option>إيروبريس (AeroPress)</option>
+          <option>سيفون (Siphon)</option>
+          <option>موكا بوت (Moka Pot)</option>
+          <option>إسبريسو (Espresso)</option>
+          <option>كولد برو (Cold Brew)</option>
+          <option>قهوة عربية</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>نوع الحبوب / السلالة</label>
+        <select id="beanVariety">
+          <option value="">اختر...</option>
+          <optgroup label="— إثيوبية —">
+            <option>هيرلوم إثيوبي (Ethiopian Heirloom)</option>
+            <option>جيشا (Gesha)</option>
+            <option>سودان روم (Sudan Rume)</option>
+            <option>كورومي (Kurume)</option>
+            <option>هرار (Harar)</option>
+            <option>سيدامو (Sidamo)</option>
+            <option>يرغاشيف (Yirgacheffe)</option>
+            <option>شيروسو (Chiroso)</option>
+          </optgroup>
+          <optgroup label="— تيبيكا وفروعها —">
+            <option>تيبيكا (Typica)</option>
+            <option>جاوا (Java)</option>
+            <option>بلو ماونتن (Blue Mountain)</option>
+            <option>مارجوجيبي (Maragogype)</option>
+            <option>ماراكاتورا (Maracaturra)</option>
+            <option>لورينا (Laurina)</option>
+            <option>موكا / موخا (Mokka)</option>
+            <option>كينت (Kent)</option>
+            <option>نياسالاند (Nyasaland)</option>
+            <option>أروشا (Arusha)</option>
+            <option>كونا هاواي (Kona)</option>
+            <option>باشي كومون (Pache Común)</option>
+            <option>بيرجيندال (Bergendal)</option>
+            <option>سيدكالانج (Sidikalang)</option>
+          </optgroup>
+          <optgroup label="— بوربون وفروعها —">
+            <option>بوربون أحمر (Red Bourbon)</option>
+            <option>بوربون أصفر (Yellow Bourbon)</option>
+            <option>بوربون وردي (Pink Bourbon)</option>
+            <option>بوربون برتقالي (Orange Bourbon)</option>
+            <option>بوربون ماياغويز (Bourbon Mayaguez)</option>
+            <option>فرنش ميشن (French Mission)</option>
+            <option>سيدرا (Sidra)</option>
+            <option>باكاس (Pacas)</option>
+            <option>فيلا سارشي (Villa Sarchi)</option>
+            <option>جاكسون (Jackson)</option>
+          </optgroup>
+          <optgroup label="— كاتورا / كاتواي —">
+            <option>كاتورا (Caturra)</option>
+            <option>كاتواي أحمر (Red Catuai)</option>
+            <option>كاتواي أصفر (Yellow Catuai)</option>
+            <option>موندو نوفو (Mundo Novo)</option>
+            <option>أكايا (Acaia)</option>
+            <option>كاتيغوا (Catigua MG2)</option>
+            <option>إيكاتو (Icatu)</option>
+            <option>باشي كوليس (Pache Colis)</option>
+          </optgroup>
+          <optgroup label="— سلالات كينيا —">
+            <option>سكوت لابز 28 (SL28)</option>
+            <option>سكوت لابز 34 (SL34)</option>
+            <option>كيه سبعة (K7)</option>
+            <option>روير أحد عشر (Ruiru 11)</option>
+            <option>باتيان (Batian)</option>
+          </optgroup>
+          <optgroup label="— آسيا والهند —">
+            <option>إس 795 (S795)</option>
+            <option>بيرجيكوبي (Bergekopi)</option>
+          </optgroup>
+          <optgroup label="— أمريكا الوسطى —">
+            <option>باكامارا (Pacamara)</option>
+            <option>كاستيو (Castillo)</option>
+            <option>كولومبيا (Colombia)</option>
+            <option>تابي (Tabi)</option>
+            <option>لمبيرا (Lempira)</option>
+            <option>كاسيوبيا (Casiopea)</option>
+            <option>برنارديناً (Bernardina)</option>
+          </optgroup>
+          <optgroup label="— مقاومة للأمراض —">
+            <option>كاتيمور (Catimor)</option>
+            <option>كاتيمور 129 / نييكا (Catimor 129)</option>
+            <option>كاتيسيك (Catisic)</option>
+            <option>أناكافي 14 (Anacafe 14)</option>
+            <option>كوستاريكا 95 (Costa Rica 95)</option>
+            <option>فرونتون (Fronton)</option>
+            <option>سارشيمور (Sarchimor)</option>
+            <option>كوسكاتلكو (Cuscatleco)</option>
+            <option>هيبريدو دي تيمور (Hibrido de Timor)</option>
+            <option>إتش ثري (H3)</option>
+          </optgroup>
+          <optgroup label="— هجين F1 —">
+            <option>سنتروأمريكانو (Centroamericano)</option>
+            <option>ستارمايا (Starmaya)</option>
+            <option>مارسيليزا (Marsellesa)</option>
+            <option>إيفالونا (Evaluna)</option>
+            <option>موندو مايا (Mundo Maya)</option>
+            <option>ميلينيو (Milenio)</option>
+            <option>إسبيرانزا (Esperanza)</option>
+            <option>موندوميكس (MundoMex)</option>
+          </optgroup>
+          <optgroup label="— أنواع أخرى —">
+            <option>روبوستا (Robusta)</option>
+            <option>ليبيريكا (Liberica)</option>
+            <option>ستينوفيلا (Stenophylla)</option>
+            <option>أخرى / غير معروفة</option>
+          </optgroup>
+        </select>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -592,9 +938,10 @@
   <section>
     <div class="sec-label">عجلة النكهات</div>
     <div class="wheel-wrap">
-      <svg class="wheel-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" id="flavorWheel">
+      <svg class="wheel-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" id="flavorWheel" tabindex="-1">
         <!-- Drawn via JS below -->
       </svg>
+      <div id="wheelLabel"></div>
       <div class="flavor-chips" id="chips"></div>
     </div>
   </section>
@@ -623,6 +970,7 @@
         <div class="dot" data-g="acidInt" data-i="4"></div>
         <div class="dot" data-g="acidInt" data-i="5"></div>
       </div>
+      <span class="dot-label" id="acidInt-label"></span>
     </div>
 
     <div>
@@ -634,9 +982,7 @@
         <div class="dot" data-g="bodyInt" data-i="4" title="ثقيل"></div>
         <div class="dot" data-g="bodyInt" data-i="5" title="كريمي"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:0.68rem;color:#bbb">
-        <span>خفيف</span><span>متوسط</span><span>كريمي</span>
-      </div>
+      <span class="dot-label" id="bodyInt-label"></span>
     </div>
   </section>
 
@@ -653,6 +999,7 @@
         <div class="dot" data-g="sweet" data-i="4"></div>
         <div class="dot" data-g="sweet" data-i="5"></div>
       </div>
+      <span class="dot-label" id="sweet-label"></span>
     </div>
     <div class="intensity-row">
       <span class="int-label">المرارة</span>
@@ -663,6 +1010,7 @@
         <div class="dot" data-g="bitter" data-i="4"></div>
         <div class="dot" data-g="bitter" data-i="5"></div>
       </div>
+      <span class="dot-label" id="bitter-label"></span>
     </div>
     <div class="intensity-row">
       <span class="int-label">الطعم القابض</span>
@@ -673,6 +1021,7 @@
         <div class="dot" data-g="astringent" data-i="4"></div>
         <div class="dot" data-g="astringent" data-i="5"></div>
       </div>
+      <span class="dot-label" id="astringent-label"></span>
     </div>
     <div class="intensity-row">
       <span class="int-label">النظافة</span>
@@ -683,6 +1032,7 @@
         <div class="dot" data-g="clean" data-i="4"></div>
         <div class="dot" data-g="clean" data-i="5"></div>
       </div>
+      <span class="dot-label" id="clean-label"></span>
     </div>
 
     <div class="field-grid" style="margin-top:1rem">
@@ -752,21 +1102,9 @@
   </section>
 
   <!-- LIVE SUMMARY -->
-  <section class="full" id="summarySection" style="background:var(--deep);border-color:var(--dark);">
+  <section class="full" style="background:var(--deep);border-color:var(--dark);">
     <div class="sec-label" style="color:var(--gold)">بيان التذوق الرسمي</div>
-
-    <div style="display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:start">
-      <div id="summaryText" style="font-size:0.95rem;line-height:2.1;color:var(--cream);direction:rtl;white-space:pre-wrap;min-height:60px"></div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;flex-shrink:0">
-        <div style="width:80px;height:80px;border-radius:50%;border:2px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <span id="sumScore" style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);font-weight:700;line-height:1">—</span>
-          <span style="font-size:0.6rem;color:var(--mid);letter-spacing:0.1em">/ 100</span>
-        </div>
-        <div id="sumStars" style="color:var(--gold);font-size:1.1rem;letter-spacing:2px">☆☆☆☆☆</div>
-      </div>
-    </div>
-    <div id="sumChips" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.4rem"></div>
-    <div style="margin-top:1.2rem;border-top:1px solid var(--dark);padding-top:0.9rem;font-size:0.72rem;color:var(--mid);letter-spacing:0.08em;text-align:center" id="sumDate"></div>
+    <div id="sumContainer" class="sum-card"></div>
   </section>
 
   <!-- ACTIONS -->
@@ -808,114 +1146,131 @@
 
 </main>
 
+<!-- COMPARISON MODAL -->
+<div class="cmp-overlay" id="cmpOverlay" onclick="if(event.target===this)closeCmp()">
+  <div class="cmp-box">
+    <div class="cmp-header">
+      <span class="cmp-title">مقارنة التذوقات</span>
+      <button class="arch-close" onclick="closeCmp()">✕</button>
+    </div>
+    <div class="cmp-grid" id="cmpGrid"></div>
+  </div>
+</div>
+
 <script>
 /* ── FLAVOR WHEEL ── */
 const segments = [
-  { name:'فاكهي', color:'#E8734A', subs:['توت','حمضيات','تفاح','خوخ'] },
-  { name:'زهري', color:'#D4608B', subs:['ورد','ياسمين','بنفسج','لافندر'] },
-  { name:'توابل', color:'#A0522D', subs:['قرفة','هيل','فانيليا','أنيس'] },
-  { name:'مكسرات', color:'#C8863A', subs:['لوز','بندق','كاكاو','شوكولا'] },
-  { name:'كراميل', color:'#D4A843', subs:['عسل','سكر بني','تفاح مكرمل'] },
-  { name:'خضري', color:'#5E9E6E', subs:['أعشاب','شاي أخضر','خشب'] },
+  { name:'فاكهي',   color:'#D94F3D', subs:[['توت','توت'],['جافة','فاكهة جافة'],['أخرى','فاكهة أخرى'],['حمضيات','حمضيات']] },
+  { name:'حامض',    color:'#B5C934', subs:[['عطري','حامض عطري'],['خل','حامض/خل'],['ليموني','حمض ليموني'],['مخمر','مخمر/نبيذي']] },
+  { name:'نباتي',   color:'#4A9A4A', subs:[['أعشاب','أعشاب'],['زيتون','زيتوني'],['بقولي','بقولي'],['قش','قشي/نباتي']] },
+  { name:'أخرى',    color:'#888888', subs:[['ورقي','ورقي/كرتون'],['عفن','عفن/ترابي'],['حيواني','حيواني'],['كيماوي','كيماوي']] },
+  { name:'محمص',    color:'#6D4C41', subs:[['تبغ','تبغ'],['دخان','دخاني'],['رماد','رمادي/محروق'],['حبوب','حبوب/مالت']] },
+  { name:'توابل',   color:'#BF5B22', subs:[['فلفل','فلفل'],['نفاذ','نفاذ'],['بنية','توابل بنية'],['هيل','هيل']] },
+  { name:'مكسرات',  color:'#A07850', subs:[['فول','فول سوداني'],['بندق','بندق/لوز'],['كاكاو','كاكاو'],['شوكولا','شوكولاتة']] },
+  { name:'حلو',     color:'#E0A800', subs:[['عسل','عسل'],['كراميل','كراميل/سكر'],['فانيليا','فانيليا'],['قيقب','شراب قيقب']] },
+  { name:'زهري',    color:'#D45585', subs:[['ورد','ورد'],['ياسمين','ياسمين'],['بابونج','بابونج'],['شاي','شاي أسود']] },
 ];
 
-const svg = document.getElementById('flavorWheel');
-const cx = 150, cy = 150, r1 = 45, r2 = 90, r3 = 130;
-const total = segments.length;
+(function buildWheel(){
+  const svg = document.getElementById('flavorWheel');
+  const cx=200, cy=200, r0=55, r1=108, r2=185;
+  const TAU=Math.PI*2, N=segments.length;
+  const NS='http://www.w3.org/2000/svg';
 
-function polar(cx,cy,r,angle){
-  return [cx+r*Math.cos(angle), cy+r*Math.sin(angle)];
-}
+  function pt(r,a){ return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
 
-function arc(cx,cy,r,start,end,large){
-  const s=polar(cx,cy,r,start), e=polar(cx,cy,r,end);
-  return `M${s[0]},${s[1]} A${r},${r},0,${large},1,${e[0]},${e[1]}`;
-}
+  function wedgePath(ra,rb,a0,a1){
+    const lg=a1-a0>Math.PI?1:0;
+    const [ax,ay]=pt(ra,a0),[bx,by]=pt(ra,a1);
+    const [cx2,cy2]=pt(rb,a1),[dx,dy]=pt(rb,a0);
+    return `M${ax},${ay} A${ra},${ra},0,${lg},1,${bx},${by} L${cx2},${cy2} A${rb},${rb},0,${lg},0,${dx},${dy} Z`;
+  }
 
-function slice(r1,r2,start,end){
-  const large=end-start>Math.PI?1:0;
-  const a=polar(cx,cy,r1,start),b=polar(cx,cy,r1,end);
-  const c=polar(cx,cy,r2,end),d=polar(cx,cy,r2,start);
-  return `M${a[0]},${a[1]} A${r1},${r1},0,${large},1,${b[0]},${b[1]} L${c[0]},${c[1]} A${r2},${r2},0,${large},0,${d[0]},${d[1]} Z`;
-}
+  function addLabel(txt, r, angle, size, fill, bold){
+    const [x,y]=pt(r,angle);
+    let deg=(angle*180/Math.PI)+90;
+    if(angle>Math.PI/2 && angle<Math.PI*1.5) deg+=180;
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',x); t.setAttribute('y',y);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle');
+    t.setAttribute('font-size',size); t.setAttribute('fill',fill);
+    t.setAttribute('font-family','Tajawal,sans-serif');
+    if(bold) t.setAttribute('font-weight','700');
+    t.setAttribute('transform',`rotate(${deg},${x},${y})`);
+    t.setAttribute('pointer-events','none');
+    t.textContent=txt; svg.appendChild(t);
+  }
 
-segments.forEach((seg,i)=>{
-  const start = (i/total)*2*Math.PI - Math.PI/2;
-  const end   = ((i+1)/total)*2*Math.PI - Math.PI/2;
-  const mid   = (start+end)/2;
+  const wheelLabel = document.getElementById('wheelLabel');
 
-  // outer ring
-  const outerSlice = document.createElementNS('http://www.w3.org/2000/svg','path');
-  outerSlice.setAttribute('d', slice(r1,r2,start,end));
-  outerSlice.setAttribute('fill', seg.color);
-  outerSlice.setAttribute('stroke','white');
-  outerSlice.setAttribute('stroke-width','1.5');
-  outerSlice.style.cursor='pointer';
-  outerSlice.style.opacity='0.85';
-  outerSlice.addEventListener('click',()=>{ outerSlice.style.opacity = outerSlice.style.opacity==='1'?'0.85':'1'; });
-  svg.appendChild(outerSlice);
+  segments.forEach((seg,i)=>{
+    const a0=(i/N)*TAU - Math.PI/2;
+    const a1=((i+1)/N)*TAU - Math.PI/2;
+    const aMid=(a0+a1)/2, span=a1-a0;
 
-  // sub-segments
-  const subN = seg.subs.length;
-  seg.subs.forEach((sub,j)=>{
-    const ss = start + (j/subN)*(end-start);
-    const se = start + ((j+1)/subN)*(end-start);
-    const sp = document.createElementNS('http://www.w3.org/2000/svg','path');
-    sp.setAttribute('d', slice(r2,r3,ss,se));
-    sp.setAttribute('fill', seg.color);
-    sp.setAttribute('fill-opacity','0.45');
-    sp.setAttribute('stroke','white');
-    sp.setAttribute('stroke-width','1');
-    sp.dataset.sub = seg.name + '|' + sub;
-    sp.style.cursor='pointer';
-    sp.addEventListener('click',()=>{
-      const active = sp.getAttribute('fill-opacity')==='0.9';
-      sp.setAttribute('fill-opacity', active?'0.45':'0.9');
+    // ── inner wedge (category) ─────────────────────────────────────────────
+    const inner=document.createElementNS(NS,'path');
+    inner.setAttribute('d', wedgePath(r0,r1,a0,a1));
+    inner.setAttribute('fill', seg.color);
+    inner.setAttribute('stroke','#fff');
+    inner.setAttribute('stroke-width','1.5');
+    inner.style.cursor='pointer';
+    svg.appendChild(inner);
+    addLabel(seg.name, (r0+r1)/2, aMid, '10', '#fff', true);
+
+    // ── outer sub-segments ─────────────────────────────────────────────────
+    seg.subs.forEach(([short, full],j)=>{
+      const sa0=a0+(j/4)*span, sa1=a0+((j+1)/4)*span, saMid=(sa0+sa1)/2;
+
+      const sp=document.createElementNS(NS,'path');
+      sp.setAttribute('d', wedgePath(r1,r2,sa0,sa1));
+      sp.setAttribute('fill', seg.color);
+      sp.setAttribute('fill-opacity','0.30');
+      sp.setAttribute('stroke','#fff');
+      sp.setAttribute('stroke-width','0.7');
+      sp.dataset.sub=seg.name+'|'+full;
+      sp.style.cursor='pointer';
+
+      sp.addEventListener('pointerup', e=>{
+        e.preventDefault();
+        const on=sp.getAttribute('fill-opacity')==='0.88';
+        sp.setAttribute('fill-opacity', on?'0.30':'0.88');
+        sp.setAttribute('stroke-width',  on?'0.7':'2');
+        sp.setAttribute('stroke',        on?'#fff':seg.color);
+        wheelLabel.textContent = on ? '' : full;
+      });
+      svg.appendChild(sp);
+
+      // abbreviated label on outer segment
+      addLabel(short, (r1+r2)/2, saMid, '6.5', '#3D2314', false);
     });
-    svg.appendChild(sp);
-
-    // sub label
-    const sml = (ss+se)/2;
-    const [lx,ly] = polar(cx,cy,r2+18,sml);
-    const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
-    t2.setAttribute('x',lx); t2.setAttribute('y',ly);
-    t2.setAttribute('text-anchor','middle');
-    t2.setAttribute('dominant-baseline','middle');
-    t2.setAttribute('font-size','6.5');
-    t2.setAttribute('fill','#3D2314');
-    t2.setAttribute('font-family','Tajawal,sans-serif');
-    t2.textContent = sub;
-    svg.appendChild(t2);
   });
 
-  // main label
-  const [lx,ly] = polar(cx,cy,(r1+r2)/2,mid);
-  const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-  t.setAttribute('x',lx); t.setAttribute('y',ly);
-  t.setAttribute('text-anchor','middle');
-  t.setAttribute('dominant-baseline','middle');
-  t.setAttribute('font-size','8');
-  t.setAttribute('fill','white');
-  t.setAttribute('font-weight','700');
-  t.setAttribute('font-family','Tajawal,sans-serif');
-  t.textContent = seg.name;
-  svg.appendChild(t);
-});
-
-// center circle
-const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r1);
-c.setAttribute('fill','#1A0F08');
-svg.appendChild(c);
-const ct = document.createElementNS('http://www.w3.org/2000/svg','text');
-ct.setAttribute('x',cx); ct.setAttribute('y',cy);
-ct.setAttribute('text-anchor','middle'); ct.setAttribute('dominant-baseline','middle');
-ct.setAttribute('fill','#C8863A'); ct.setAttribute('font-size','10');
-ct.setAttribute('font-family','Playfair Display,serif');
-ct.textContent='نكهة'; svg.appendChild(ct);
+  // center disk
+  const disk=document.createElementNS(NS,'circle');
+  disk.setAttribute('cx',cx); disk.setAttribute('cy',cy); disk.setAttribute('r',r0-1);
+  disk.setAttribute('fill','#1A0F08'); disk.setAttribute('pointer-events','none');
+  svg.appendChild(disk);
+  const ct=document.createElementNS(NS,'text');
+  ct.setAttribute('x',cx); ct.setAttribute('y',cy);
+  ct.setAttribute('text-anchor','middle'); ct.setAttribute('dominant-baseline','middle');
+  ct.setAttribute('fill','#C8863A'); ct.setAttribute('font-size','14');
+  ct.setAttribute('font-family','Tajawal,sans-serif'); ct.setAttribute('font-weight','700');
+  ct.setAttribute('pointer-events','none'); ct.textContent='نكهة';
+  svg.appendChild(ct);
+})();
 
 /* flavor chips */
-const allFlavors=['توت','فراولة','مانجو','برتقال','ليمون','ورد','ياسمين','قرفة','فانيليا','هيل','شوكولا','لوز','بندق','كراميل','عسل','سكر بني','أعشاب','شاي','خشب','ترابي'];
+const allFlavors=[
+  // فاكهي
+  'توت أحمر','توت أزرق','فراولة','عنبية','زبيب/برقوق','كرز','تفاح','خوخ','كمثرى','أناناس','جريب فروت','برتقال','ليمون','لايم',
+  // زهري وحلو
+  'ورد','ياسمين','بابونج','شاي أسود','عسل','كراميل','فانيليا','سكر بني',
+  // مكسرات وتوابل
+  'لوز','بندق','فول سوداني','شوكولا','كاكاو','قرفة','هيل','فلفل',
+  // محمص وأخضر
+  'دخاني','تبغي','محروق','أعشاب','زيتون','خشب','مالت'
+];
 const chipsEl = document.getElementById('chips');
 allFlavors.forEach(f=>{
   const ch = document.createElement('div');
@@ -958,6 +1313,14 @@ if(_sev) _sev.addEventListener('change', ()=>{ updateScore(); scheduleSummary();
 updateScore();
 
 /* ── DOTS ── */
+const DOT_LABELS = {
+  acidInt:    ['','خفيفة جداً','خفيفة','متوازنة','واضحة','حادة'],
+  bodyInt:    ['','خفيف جداً','خفيف','متوسط','ثقيل','كريمي'],
+  sweet:      ['','خفيفة جداً','خفيفة','متوازنة','واضحة','غنية'],
+  bitter:     ['','خفيفة جداً','خفيفة','متوسطة','واضحة','حادة'],
+  astringent: ['','خفيف جداً','خفيف','متوسط','واضح','حاد'],
+  clean:      ['','ضعيفة','مقبولة','جيدة','واضحة','مثالية'],
+};
 document.querySelectorAll('.dot').forEach(dot=>{
   dot.addEventListener('click',()=>{
     const g = dot.dataset.g;
@@ -965,6 +1328,8 @@ document.querySelectorAll('.dot').forEach(dot=>{
     document.querySelectorAll(`[data-g="${g}"]`).forEach(d=>{
       d.classList.toggle('filled', parseInt(d.dataset.i)<=i);
     });
+    const labelEl = document.getElementById(g+'-label');
+    if(labelEl && DOT_LABELS[g]) labelEl.textContent = DOT_LABELS[g][i] || '';
   });
 });
 
@@ -984,17 +1349,13 @@ starEls.forEach(s=>{
     const val = parseInt(s.dataset.s);
     starEls.forEach(x=>x.classList.toggle('lit', parseInt(x.dataset.s)<=val));
     document.getElementById('starLabel').textContent = starLabels[val] || '';
+    scheduleSummary();
+    scheduleDraft();
   });
 });
 
 /* ── PRINT / PDF PREVIEW ── */
 function triggerPrint(){ window.print(); }
-
-/* ── EMERGENCY RESET ── */
-function emergencyReset(){
-  try{ localStorage.removeItem('coffeeCuppingDraft_v1'); }catch(e){}
-  location.reload();
-}
 
 /* ── CLEAR ── */
 function clearAll(){
@@ -1003,126 +1364,177 @@ function clearAll(){
   sliders.forEach(s=>{ s.value = s.min; const vEl=document.getElementById(s.id.replace('s','v')); if(vEl) vEl.textContent = s.value; });
   touched.clear();
   document.querySelectorAll('.dot').forEach(d=>d.classList.remove('filled'));
+  document.querySelectorAll('.dot-label').forEach(el=>el.textContent='');
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.acid-seg').forEach(b=>b.classList.remove('sel'));
   starEls.forEach(s=>s.classList.remove('lit'));
   document.getElementById('starLabel').textContent='اختر تقييمك النهائي';
   // reset flavor wheel: sub-segments + outer slices
-  document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>p.setAttribute('fill-opacity','0.45'));
-  document.querySelectorAll('#flavorWheel path:not([data-sub])').forEach(p=>{ if(p.style.opacity) p.style.opacity='0.85'; });
-  currentEntryId = null; // start a fresh sheet
+  document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>{
+    p.setAttribute('fill-opacity','0.30');
+    p.setAttribute('stroke-width','0.7');
+    p.setAttribute('stroke','#fff');
+  });
+  const wl=document.getElementById('wheelLabel'); if(wl) wl.textContent='';
+  currentEntryId = null;
   clearDraft();
   updateScore();
+}
+
+/* ── RADAR CHART ── */
+const RADAR_AXES = ['حموضة','قوام','حلاوة','مرارة','قابضية','نظافة'];
+
+function drawRadar(svgEl, vals, color){
+  if(!svgEl) return;
+  svgEl.innerHTML='';
+  const NS='http://www.w3.org/2000/svg';
+  const cx=110, cy=110, r=78, n=6;
+  const TAU=Math.PI*2;
+  const mk=(tag,attrs)=>{ const el=document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); return el; };
+  const pt=(rv,i)=>{ const a=(i/n)*TAU-Math.PI/2; return [cx+rv*Math.cos(a), cy+rv*Math.sin(a)]; };
+  for(let ring=1;ring<=5;ring++){
+    const pts=Array.from({length:n},(_,i)=>pt(r*ring/5,i).join(',')).join(' ');
+    svgEl.appendChild(mk('polygon',{points:pts,fill:'none',stroke:'rgba(200,134,58,0.12)','stroke-width':'1'}));
+  }
+  for(let i=0;i<n;i++){
+    const [x2,y2]=pt(r,i);
+    svgEl.appendChild(mk('line',{x1:cx,y1:cy,x2,y2,stroke:'rgba(200,134,58,0.18)','stroke-width':'1'}));
+    const [lx,ly]=pt(r+18,i);
+    const t=mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'9.5','font-family':'Tajawal,sans-serif',fill:'#8B5E3C'});
+    t.textContent=RADAR_AXES[i]; svgEl.appendChild(t);
+  }
+  const v=Array.isArray(vals)?vals:Array(n).fill(0);
+  const dpts=v.map((val,i)=>pt(r*Math.max(0,Math.min(5,val||0))/5,i).join(',')).join(' ');
+  svgEl.appendChild(mk('polygon',{points:dpts,fill:color||'rgba(200,134,58,0.22)',stroke:color||'#C8863A','stroke-width':'2','stroke-linejoin':'round'}));
+  v.forEach((val,i)=>{ const [x,y]=pt(r*Math.max(0,Math.min(5,val||0))/5,i); svgEl.appendChild(mk('circle',{cx:x,cy:y,r:'3.5',fill:color||'#C8863A'})); });
 }
 
 /* ── LIVE SUMMARY ── */
 function dotCount(groupId){
   return document.querySelectorAll(`[data-g="${groupId}"].filled`).length;
 }
-function dotLabel(n){ return ['—','●○○○○','●●○○○','●●●○○','●●●●○','●●●●●'][n]||'—'; }
 
 function buildSummary(){
-  // info
-  const inputs = document.querySelectorAll('input[type="text"]');
-  const dates  = document.querySelectorAll('input[type="date"]');
-  const selects= document.querySelectorAll('select');
-  const name    = inputs[0]?.value || '';
-  const origin  = inputs[1]?.value || '';
-  const roaster = inputs[2]?.value || '';
-  const roastDate= dates[0]?.value || '';
-  const process = selects[0]?.value || '';
-  const roastLvl= selects[1]?.value || '';
-  const altitude = inputs[3]?.value || '';
-  const tastDate = dates[1]?.value || '';
-
-  // scores
+  const inputs  = document.querySelectorAll('input[type="text"]');
+  const dates   = document.querySelectorAll('input[type="date"]');
+  const selects = document.querySelectorAll('select');
+  const name     = inputs[0]?.value.trim()  || '';
+  const origin   = inputs[1]?.value.trim()  || '';
+  const roaster  = inputs[2]?.value.trim()  || '';
+  const roastDate= dates[0]?.value          || '';
+  const process  = selects[0]?.value        || '';
+  const roastLvl = selects[1]?.value        || '';
+  const altitude = inputs[3]?.value.trim()  || '';
+  const tastDate = dates[1]?.value          || '';
+  const brewMethod = document.getElementById('brewMethod')?.value || '';
+  const variety    = document.getElementById('beanVariety')?.value.trim() || '';
   const scoreVal = document.getElementById('totalScore')?.textContent || '—';
-
-  // acidity type
-  const acidSel = document.querySelector('.acid-seg.sel');
+  const acidSel  = document.querySelector('.acid-seg.sel');
   const acidType = acidSel ? acidSel.dataset.v : '';
-
-  // dots
-  const acidInt = dotCount('acidInt');
-  const bodyInt = dotCount('bodyInt');
-  const sweet   = dotCount('sweet');
-  const bitter  = dotCount('bitter');
-  const astri   = dotCount('astringent');
-  const clean   = dotCount('clean');
-  const defectDots = 0; // legacy — now select-based
-  // defect selects
+  const acidInt  = dotCount('acidInt');
+  const bodyInt  = dotCount('bodyInt');
+  const sweet    = dotCount('sweet');
+  const bitter   = dotCount('bitter');
+  const astri    = dotCount('astringent');
+  const clean    = dotCount('clean');
   const defectTypeEl = document.getElementById('defectType');
   const defectSevEl  = document.getElementById('defectSeverity');
   const defectType   = defectTypeEl?.value || '';
   const defectPenVal = parseInt(defectSevEl?.value || '0');
-
-  // textareas (defects textarea removed — now chip-based)
-  const tas = document.querySelectorAll('textarea');
-  const aromaDesc = tas[0]?.value || '';
-  const flavorDesc= tas[1]?.value || '';
-  const aftertaste= tas[2]?.value || '';
-  const impression= tas[3]?.value || '';
-
-  // stars
+  const tas      = document.querySelectorAll('textarea');
+  const aromaDesc= tas[0]?.value.trim() || '';
+  const flavorDesc=tas[1]?.value.trim() || '';
+  const aftertaste=tas[2]?.value.trim() || '';
+  const impression=tas[3]?.value.trim() || '';
   const litStars = document.querySelectorAll('.star.lit').length;
-  const starLabels2 = ['','قهوة عادية','مقبولة','جيدة','ممتازة','استثنائية'];
-  const starTxt = litStars ? starLabels2[litStars] : '';
+  const starTxt  = litStars ? (starLabels[litStars]||'').replace('! ★','').trim() : '';
+  const chips    = [...document.querySelectorAll('.chip.active')].map(c=>c.textContent);
+  const container= document.getElementById('sumContainer');
+  if(!container) return;
 
-  // active chips
-  const chips = [...document.querySelectorAll('.chip.active')].map(c=>c.textContent);
+  const esc=s=>String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const dots=(v,max=5)=>Array.from({length:max},(_,i)=>`<div class="sum-dot${i<v?' on':''}"></div>`).join('');
 
-  // build text
-  let lines = [];
-  if(name||origin) lines.push(`☕  ${[name,origin].filter(Boolean).join(' — ')}`);
-  if(roaster)      lines.push(`المحمصة: ${roaster}${roastDate?' · '+roastDate:''}`);
-  if(process||roastLvl) lines.push([process,roastLvl].filter(Boolean).join(' · '));
-  if(altitude)     lines.push(`الارتفاع: ${altitude} م`);
+  let h='';
 
-  lines.push('');
-  if(aromaDesc)  lines.push(`الرائحة: ${aromaDesc}`);
-  if(flavorDesc) lines.push(`النكهة: ${flavorDesc}`);
-  if(aftertaste) lines.push(`المذاق الخلفي: ${aftertaste}`);
+  // ── Header ────────────────────────────────────────────────────────
+  h+='<div class="sum-header"><div>';
+  const displayName = name || origin || 'قهوة بدون اسم';
+  h+=`<div class="sum-coffee-name">${esc(displayName)}</div>`;
+  if(name && origin) h+=`<div class="sum-coffee-sub">${esc(origin)}</div>`;
+  if(variety)        h+=`<div class="sum-coffee-sub" style="color:var(--gold);font-style:italic">${esc(variety)}</div>`;
+  const subLine=[roaster,roastDate].filter(Boolean).join(' · ');
+  if(subLine) h+=`<div class="sum-coffee-sub">${esc(subLine)}</div>`;
+  h+='</div>';
+  h+=`<div class="sum-score-box"><span class="sum-score-num">${scoreVal}</span><span class="sum-score-denom">/ 100</span></div>`;
+  h+='</div>';
 
-  const qualRows = [];
-  if(acidType||acidInt) qualRows.push(`الحموضة: ${acidType||''} ${dotLabel(acidInt)}`);
-  if(bodyInt) qualRows.push(`القوام: ${dotLabel(bodyInt)}`);
-  if(sweet)   qualRows.push(`الحلاوة: ${dotLabel(sweet)}`);
-  if(bitter)  qualRows.push(`المرارة: ${dotLabel(bitter)}`);
-  if(astri)   qualRows.push(`الطعم القابض: ${dotLabel(astri)}`);
-  if(clean)   qualRows.push(`النظافة: ${dotLabel(clean)}`);
-  if(qualRows.length){ lines.push(''); lines.push(qualRows.join('  ·  ')); }
+  // ── Info tags ─────────────────────────────────────────────────────
+  const tags=[];
+  if(brewMethod) tags.push('☕ '+esc(brewMethod));
+  if(process)    tags.push('🌿 '+esc(process));
+  if(roastLvl)   tags.push('🔥 '+esc(roastLvl));
+  if(altitude)   tags.push('⛰ '+esc(altitude)+' م');
+  if(tastDate)   tags.push('📅 '+tastDate);
+  if(tags.length) h+=`<div class="sum-tags">${tags.map(t=>`<span class="sum-tag">${t}</span>`).join('')}</div>`;
 
-  if(defectType || defectPenVal){
-    lines.push('');
-    const sevLabel = defectSevEl?.options[defectSevEl.selectedIndex]?.text || '';
-    lines.push(`⚠ عيوب: ${defectType||'—'} · ${sevLabel}${defectPenVal ? ' (−'+defectPenVal+' من الدرجة)' : ''}`);
+  // ── Descriptors ───────────────────────────────────────────────────
+  if(aromaDesc||flavorDesc||aftertaste){
+    h+='<hr class="sum-divider"><div><div class="sum-sec-title">الوصف الحسي</div>';
+    if(aromaDesc)   h+=`<div class="sum-desc-item"><div class="sum-desc-label">الرائحة</div><div class="sum-desc-text">${esc(aromaDesc)}</div></div>`;
+    if(flavorDesc)  h+=`<div class="sum-desc-item"><div class="sum-desc-label">النكهة</div><div class="sum-desc-text">${esc(flavorDesc)}</div></div>`;
+    if(aftertaste)  h+=`<div class="sum-desc-item"><div class="sum-desc-label">المذاق الخلفي</div><div class="sum-desc-text">${esc(aftertaste)}</div></div>`;
+    h+='</div>';
   }
-  if(impression){ lines.push(''); lines.push(`التوصية: ${impression}`); }
-  if(starTxt){ lines.push(''); lines.push(`التقييم النهائي: ${starTxt} ${'★'.repeat(litStars)}${'☆'.repeat(5-litStars)}`); }
 
-  document.getElementById('summaryText').textContent = lines.join('\n').replace(/\n{3,}/g,'\n\n').trim() || 'ابدأ بملء الجدول وسيظهر الملخص هنا تلقائياً...';
+  // ── Quality indicators ────────────────────────────────────────────
+  const quals=[
+    ['الحموضة', acidInt, acidType],
+    ['القوام',  bodyInt],
+    ['الحلاوة', sweet],
+    ['المرارة', bitter],
+    ['القابضية',astri],
+    ['النظافة', clean],
+  ].filter(([,v])=>v>0);
+  if(quals.length){
+    h+='<hr class="sum-divider"><div><div class="sum-sec-title">مؤشرات الجودة</div>';
+    quals.forEach(([lbl,val,extra])=>{
+      h+=`<div class="sum-qual-row"><span class="sum-qual-label">${lbl}${extra?' · '+esc(extra):''}</span><div class="sum-dots-row">${dots(val)}</div></div>`;
+    });
+    h+='</div>';
+  }
 
-  // score circle
-  document.getElementById('sumScore').textContent = scoreVal;
+  // ── Flavor chips ──────────────────────────────────────────────────
+  if(chips.length)
+    h+='<div class="sum-chips-row">'+chips.map(c=>`<span class="sum-chip">${esc(c)}</span>`).join('')+'</div>';
 
-  // stars display
-  document.getElementById('sumStars').textContent = '★'.repeat(litStars)+'☆'.repeat(5-litStars);
+  // ── Defect ────────────────────────────────────────────────────────
+  if(defectType||defectPenVal){
+    const sevLbl=defectSevEl?.options[defectSevEl.selectedIndex]?.text||'';
+    h+=`<div class="sum-defect">⚠ ${esc(defectType)||'عيب'} · ${esc(sevLbl)}${defectPenVal?' (−'+defectPenVal+')':''}</div>`;
+  }
 
-  // chips
-  const chipsDiv = document.getElementById('sumChips');
-  chipsDiv.innerHTML = '';
-  chips.forEach(c=>{
-    const span = document.createElement('span');
-    span.textContent = c;
-    span.style.cssText='background:rgba(200,134,58,0.18);color:#C8863A;padding:0.25rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:600;border:1px solid rgba(200,134,58,0.3)';
-    chipsDiv.appendChild(span);
-  });
+  // ── Overall ───────────────────────────────────────────────────────
+  h+='<hr class="sum-divider"><div class="sum-overall">';
+  h+=`<div class="sum-stars">${'★'.repeat(litStars)}${'☆'.repeat(5-litStars)}</div>`;
+  if(starTxt) h+=`<div class="sum-verdict">${esc(starTxt)}</div>`;
+  h+='</div>';
 
-  // date stamp
-  const now = new Date();
-  document.getElementById('sumDate').textContent = tastDate
-    ? `تاريخ التذوق: ${tastDate}`
-    : `آخر تحديث: ${now.toLocaleTimeString('ar-SA')}`;
+  // ── Notes ─────────────────────────────────────────────────────────
+  if(impression) h+=`<div class="sum-notes">${esc(impression)}</div>`;
+
+  // ── Footer ────────────────────────────────────────────────────────
+  const footerDate = tastDate || new Date().toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'});
+  h+=`<div class="sum-footer">${footerDate}</div>`;
+
+  // ── Radar placeholder (drawn after innerHTML) ─────────────────────
+  h+=`<hr class="sum-divider"><div class="radar-wrap"><div class="sum-sec-title">شخصية القهوة</div><svg id="radarSummary" class="radar-svg" viewBox="0 0 220 220"></svg></div>`;
+
+  container.innerHTML=h;
+
+  // رسم مخطط العنكبوت
+  const radarSvg=document.getElementById('radarSummary');
+  if(radarSvg) drawRadar(radarSvg,[acidInt,bodyInt,sweet,bitter,astri,clean]);
 }
 
 /* ── SAVE / ARCHIVE ── */
@@ -1146,7 +1558,7 @@ function collectState(){
   st.acidIdx = [...document.querySelectorAll('.acid-seg')].findIndex(b=>b.classList.contains('sel'));
   st.chips = [...document.querySelectorAll('.chip.active')].map(c=>c.textContent);
   st.stars = document.querySelectorAll('.star.lit').length;
-  st.wheel = [...document.querySelectorAll('#flavorWheel path[data-sub]')].filter(p=>p.getAttribute('fill-opacity')==='0.9').map(p=>p.dataset.sub);
+  st.wheel = [...document.querySelectorAll('#flavorWheel path[data-sub]')].filter(p=>p.getAttribute('fill-opacity')==='0.88').map(p=>p.dataset.sub);
   st.touched = [...touched];
   return st;
 }
@@ -1161,12 +1573,19 @@ function applyState(st){
   touched.clear();
   if(Array.isArray(st.touched)){ st.touched.forEach(id=>touched.add(id)); }
   else { SCORE_IDS.forEach(id=>touched.add(id)); } // تذوقات قديمة بدون حالة محفوظة = كلها محتسبة
-  Object.keys(st.dots||{}).forEach(g=>{ const n=st.dots[g]; document.querySelectorAll('[data-g="'+g+'"]').forEach(d=>{ d.classList.toggle('filled', parseInt(d.dataset.i)<=n); }); });
+  Object.keys(st.dots||{}).forEach(g=>{ const n=st.dots[g]; document.querySelectorAll('[data-g="'+g+'"]').forEach(d=>{ d.classList.toggle('filled', parseInt(d.dataset.i)<=n); }); const lEl=document.getElementById(g+'-label'); if(lEl&&DOT_LABELS[g]) lEl.textContent=DOT_LABELS[g][n]||''; });
   const segs=[...document.querySelectorAll('.acid-seg')]; segs.forEach(x=>x.classList.remove('sel')); if(st.acidIdx>=0 && segs[st.acidIdx]) segs[st.acidIdx].classList.add('sel');
   document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',(st.chips||[]).includes(c.textContent)));
   starEls.forEach(x=>x.classList.toggle('lit', parseInt(x.dataset.s)<=(st.stars||0)));
   document.getElementById('starLabel').textContent = st.stars ? (starLabels[st.stars]||'') : 'اختر تقييمك النهائي';
-  if(st.wheel){ document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>{ p.setAttribute('fill-opacity', st.wheel.includes(p.dataset.sub)?'0.9':'0.45'); }); }
+  if(st.wheel){ document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>{
+    const on=st.wheel.includes(p.dataset.sub);
+    const segName=(p.dataset.sub||'').split('|')[0];
+    const segColor=(segments.find(s=>s.name===segName)||{}).color||'#fff';
+    p.setAttribute('fill-opacity', on?'0.88':'0.30');
+    p.setAttribute('stroke-width',  on?'2':'0.7');
+    p.setAttribute('stroke',        on?segColor:'#fff');
+  }); }
   updateScore(); buildSummary();
 }
 
@@ -1227,10 +1646,15 @@ function importBackup(input){
 
 function renderArchive(){
   const body=document.getElementById('archiveBody'); const arr=loadArchive();
+  // reset compare bar
+  const oldBar=document.getElementById('compareBar'); if(oldBar) oldBar.remove();
   if(!arr.length){ body.innerHTML='<div class="arch-empty">ما فيه تذوقات محفوظة بعد.<br>عبّي الجدول واضغط «حفظ التذوق».</div>'; return; }
   body.innerHTML='';
   arr.forEach(en=>{
     const item=document.createElement('div'); item.className='arch-item';
+    // checkbox for comparison
+    const chk=document.createElement('input'); chk.type='checkbox'; chk.className='arch-check'; chk.dataset.id=en.id;
+    chk.addEventListener('change',updateCompareBar);
     const sc=document.createElement('div'); sc.className='arch-score'; sc.textContent=en.score||'—';
     const meta=document.createElement('div'); meta.className='arch-meta';
     const t=document.createElement('div'); t.className='arch-title'; t.textContent=en.title;
@@ -1240,10 +1664,66 @@ function renderArchive(){
     const ob=document.createElement('button'); ob.className='arch-btn open-b'; ob.textContent='فتح'; ob.onclick=()=>loadEntry(en.id);
     const db=document.createElement('button'); db.className='arch-btn del-b'; db.textContent='حذف'; db.onclick=()=>deleteEntry(en.id);
     acts.appendChild(ob); acts.appendChild(db);
-    item.appendChild(sc); item.appendChild(meta); item.appendChild(acts);
+    item.appendChild(chk); item.appendChild(sc); item.appendChild(meta); item.appendChild(acts);
     body.appendChild(item);
   });
+  // compare bar
+  let bar=document.getElementById('compareBar');
+  if(!bar){
+    bar=document.createElement('div'); bar.id='compareBar'; bar.className='arch-compare-bar';
+    bar.innerHTML='<span id="compareBarText">اختر تذوقين للمقارنة</span><button onclick="runComparison()" style="background:var(--deep);color:var(--gold);border:1px solid var(--gold);padding:0.35rem 0.9rem;border-radius:6px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700">قارن ←</button>';
+    const foot=document.querySelector('#archiveOverlay .archive-foot');
+    foot.parentNode.insertBefore(bar, foot);
+  }
 }
+
+function updateCompareBar(){
+  const checked=[...document.querySelectorAll('.arch-check:checked')];
+  const bar=document.getElementById('compareBar');
+  if(!bar) return;
+  if(checked.length===2){
+    bar.classList.add('visible');
+    document.getElementById('compareBarText').textContent='تذوقان محددان — اضغط قارن';
+    // limit to 2
+    document.querySelectorAll('.arch-check:not(:checked)').forEach(c=>c.disabled=true);
+  } else {
+    bar.classList.remove('visible');
+    document.querySelectorAll('.arch-check').forEach(c=>c.disabled=false);
+  }
+}
+
+function runComparison(){
+  const ids=[...document.querySelectorAll('.arch-check:checked')].map(c=>c.dataset.id);
+  if(ids.length!==2) return;
+  const arr=loadArchive();
+  const [a,b]=[arr.find(e=>e.id===ids[0]), arr.find(e=>e.id===ids[1])];
+  if(!a||!b) return;
+  const grid=document.getElementById('cmpGrid');
+  grid.innerHTML='';
+  [a,b].forEach((en,idx)=>{
+    const color=idx===0?'#C8863A':'#5BA85A';
+    const card=document.createElement('div'); card.className='cmp-card';
+    card.innerHTML=`
+      <div class="cmp-name">${en.title}</div>
+      <div class="cmp-score">${en.score||'—'}</div>
+      <div class="cmp-info">${en.dateLabel}</div>
+      <svg class="radar-svg" viewBox="0 0 220 220" id="cmpRadar${idx}" style="max-width:200px"></svg>
+      ${en.state?.dots?.acidInt>0?`<div class="cmp-info" style="margin-top:0.3rem;direction:rtl">
+        حموضة: ${en.state.dots.acidInt||0}/٥ &nbsp;|&nbsp; قوام: ${en.state.dots.bodyInt||0}/٥<br>
+        حلاوة: ${en.state.dots.sweet||0}/٥ &nbsp;|&nbsp; نظافة: ${en.state.dots.clean||0}/٥
+      </div>`:''}
+    `;
+    grid.appendChild(card);
+    // draw radar after appending
+    const svgEl=card.querySelector('svg');
+    const d=en.state?.dots||{};
+    drawRadar(svgEl,[d.acidInt||0,d.bodyInt||0,d.sweet||0,d.bitter||0,d.astringent||0,d.clean||0],color);
+  });
+  document.getElementById('cmpOverlay').classList.add('open');
+  closeArchive();
+}
+
+function closeCmp(){ document.getElementById('cmpOverlay').classList.remove('open'); }
 
 function loadEntry(id){
   const en=loadArchive().find(e=>e.id===id); if(!en) return;
