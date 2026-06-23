@@ -402,15 +402,14 @@
   .star {
     font-size: 2rem;
     cursor: pointer;
-    color: var(--light);
-    transition: color 0.15s, transform 0.15s;
+    color: rgba(200,134,58,0.28);
+    transition: color 0.18s, transform 0.15s, text-shadow 0.18s;
     user-select: none;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-
-  .star.lit { color: var(--gold); }
-  .star:hover { transform: scale(1.15); }
+  .star.lit { color: var(--gold); text-shadow: 0 0 10px rgba(200,134,58,0.45); }
+  .star:hover { transform: scale(1.18); }
 
   .overall-label {
     text-align: center;
@@ -532,6 +531,27 @@
     color: #e07865;
   }
   .sum-overall { display:flex; align-items:center; gap:0.9rem; }
+  .sum-stars-wrap { display:flex; align-items:center; gap:0.7rem; }
+  .sum-stars-precise {
+    display: flex; align-items: baseline; gap: 1px;
+    background: rgba(200,134,58,0.1);
+    border: 1px solid rgba(200,134,58,0.3);
+    border-radius: 6px;
+    padding: 0.15rem 0.55rem;
+  }
+  .sum-precise-val {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+  }
+  .sum-precise-denom {
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--mid);
+    font-weight: 600;
+  }
   .sum-stars { font-size: 1.2rem; color: var(--gold); letter-spacing: 3px; }
   .sum-verdict {
     font-family: 'Playfair Display', serif;
@@ -556,6 +576,15 @@
   }
 
   /* ── RADAR CHART ── */
+  @keyframes radarIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .radar-data-group {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: radarIn 0.55s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  }
   .radar-wrap { display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-top:0.5rem; }
   .radar-svg  { width:100%; max-width:260px; }
   .radar-axis-label { font-size:9px; font-family:'Tajawal',sans-serif; fill:var(--mid); }
@@ -777,7 +806,53 @@
     letter-spacing: 0.05em;
   }
 
-  /* light mode */
+  /* ── BAR CHART VIEW ── */
+  .rating-header {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 0.8rem;
+  }
+  .rating-toggle {
+    display: flex; gap: 4px;
+    background: rgba(200,134,58,0.1);
+    border-radius: 8px; padding: 3px;
+  }
+  .rating-toggle-btn {
+    width: 30px; height: 30px; border-radius: 6px;
+    border: none; cursor: pointer; background: transparent;
+    color: var(--mid); display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s; touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rating-toggle-btn.active {
+    background: var(--gold); color: var(--deep);
+  }
+  .rating-toggle-btn svg { width: 16px; height: 16px; }
+
+  .bar-chart { display: none; gap: 6px; align-items: flex-end; height: 110px; direction: rtl; }
+  .bar-chart.visible { display: flex; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .bar-track {
+    width: 100%; flex: 1; border-radius: 4px 4px 0 0;
+    background: rgba(200,134,58,0.1);
+    position: relative; overflow: hidden;
+    min-height: 80px;
+  }
+  .bar-fill {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--gold); border-radius: 4px 4px 0 0;
+    transition: height 0.4s cubic-bezier(0.4,0,0.2,1);
+    height: 0%;
+  }
+  .bar-val {
+    font-size: 0.62rem; font-weight: 700;
+    color: var(--gold); min-width: 20px; text-align: center;
+  }
+  .bar-name {
+    font-size: 0.52rem; color: var(--mid);
+    text-align: center; line-height: 1.2;
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 100%;
+  }
   .light-mode section { background: var(--surface); }
   .light-mode section.full { background: var(--deep) !important; }
   .light-mode .archive-modal { background: var(--surface); }
@@ -1338,15 +1413,32 @@
 
   <!-- OVERALL RATING -->
   <section class="full">
-    <div class="sec-label">التقييم النهائي</div>
-    <div class="star-row" id="stars">
-      <span class="star" data-s="5">★</span>
-      <span class="star" data-s="4">★</span>
-      <span class="star" data-s="3">★</span>
-      <span class="star" data-s="2">★</span>
-      <span class="star" data-s="1">★</span>
+    <div class="rating-header">
+      <div class="sec-label" style="margin-bottom:0">التقييم النهائي</div>
+      <div class="rating-toggle">
+        <button class="rating-toggle-btn active" id="btnStars" onclick="setRatingView('stars')" title="نجوم">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </button>
+        <button class="rating-toggle-btn" id="btnChart" onclick="setRatingView('chart')" title="رسم بياني">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="overall-label" id="starLabel">اختر تقييمك النهائي</div>
+
+    <!-- Stars view -->
+    <div id="starsView">
+      <div class="star-row" id="stars">
+        <span class="star" data-s="5">☆</span>
+        <span class="star" data-s="4">☆</span>
+        <span class="star" data-s="3">☆</span>
+        <span class="star" data-s="2">☆</span>
+        <span class="star" data-s="1">☆</span>
+      </div>
+      <div class="overall-label" id="starLabel">اختر تقييمك النهائي</div>
+    </div>
+
+    <!-- Bar chart view -->
+    <div class="bar-chart" id="barChart"></div>
   </section>
 
   <!-- LIVE SUMMARY -->
@@ -1576,6 +1668,49 @@ function resetColors(){
   toast('تم استعادة الألوان الأصلية ✓');
 }
 
+/* ── RATING VIEW TOGGLE ── */
+let _ratingView = 'stars';
+
+function setRatingView(view){
+  _ratingView = view;
+  document.getElementById('starsView').style.display = view==='stars' ? '' : 'none';
+  document.getElementById('barChart').classList.toggle('visible', view==='chart');
+  document.getElementById('btnStars').classList.toggle('active', view==='stars');
+  document.getElementById('btnChart').classList.toggle('active', view==='chart');
+  if(view==='chart') buildBarChart();
+  try{ localStorage.setItem('coffeeRatingView', view); }catch(e){}
+}
+
+function buildBarChart(){
+  const chart = document.getElementById('barChart');
+  if(!chart) return;
+
+  const bars = [
+    { label:'رائحة\nجافة',  val: parseFloat(document.getElementById('s1')?.value||6), min:6, max:10 },
+    { label:'رائحة\nرطبة',  val: parseFloat(document.getElementById('s2')?.value||6), min:6, max:10 },
+    { label:'النكهة',       val: parseFloat(document.getElementById('s3')?.value||6), min:6, max:10 },
+    { label:'خلفية',        val: parseFloat(document.getElementById('s4')?.value||6), min:6, max:10 },
+    { label:'الحموضة',      val: parseFloat(document.getElementById('s5')?.value||6), min:6, max:10 },
+    { label:'الحلاوة',      val: parseFloat(document.getElementById('s7')?.value||6), min:6, max:10 },
+    { label:'التوازن',      val: parseFloat(document.getElementById('s8')?.value||6), min:6, max:10 },
+    { label:'حموضة\nكثافة', val: dotCount('acidInt'),   min:0, max:5 },
+    { label:'قوام',         val: dotCount('bodyInt'),   min:0, max:5 },
+    { label:'حلاوة\nكثافة', val: dotCount('sweet'),     min:0, max:5 },
+    { label:'مرارة',        val: dotCount('bitter'),    min:0, max:5 },
+    { label:'نظافة',        val: dotCount('clean'),     min:0, max:5 },
+  ];
+
+  chart.innerHTML = bars.map(b=>{
+    const pct = b.max===b.min ? 0 : Math.round((b.val-b.min)/(b.max-b.min)*100);
+    const display = b.max<=5 ? `${b.val}/5` : b.val.toFixed(2);
+    return `<div class="bar-col">
+      <div class="bar-val">${pct>0?display:''}</div>
+      <div class="bar-track"><div class="bar-fill" style="height:${pct}%"></div></div>
+      <div class="bar-name">${b.label.replace('\n','<br>')}</div>
+    </div>`;
+  }).join('');
+}
+
 function adjustFont(delta){
   const html = document.documentElement;
   const cur = parseFloat(html.style.fontSize) || 16;
@@ -1630,8 +1765,10 @@ document.addEventListener('click', e=>{
       const el = document.getElementById('fontSizeVal');
       if(el) el.textContent = Math.round(parseFloat(fontSize)/16*100) + '%';
     }
+    const ratingView = localStorage.getItem('coffeeRatingView');
+    if(ratingView) setRatingView(ratingView);
   }catch(e){ setTheme('قهوة'); }
-})();;
+})();
 
 /* ── FLAVOR WHEEL ── */
 const segments = [
@@ -1786,6 +1923,7 @@ sliders.forEach(s=>{
   s.addEventListener('change',()=>{
     scheduleSummary();
     scheduleDraft();
+    if(_ratingView==='chart') buildBarChart();
   });
 });
 // عيوب — شدة العيب: score + summary + draft في حدث واحد
@@ -1828,10 +1966,15 @@ const starLabels = ['','قهوة عادية','مقبولة','جيدة','ممتا
 starEls.forEach(s=>{
   s.addEventListener('click',()=>{
     const val = parseInt(s.dataset.s);
-    starEls.forEach(x=>x.classList.toggle('lit', parseInt(x.dataset.s)<=val));
+    starEls.forEach(x=>{
+      const on = parseInt(x.dataset.s) <= val;
+      x.classList.toggle('lit', on);
+      x.textContent = on ? '★' : '☆';
+    });
     document.getElementById('starLabel').textContent = starLabels[val] || '';
     scheduleSummary();
     scheduleDraft();
+    if(_ratingView==='chart') buildBarChart();
   });
 });
 
@@ -1848,7 +1991,7 @@ function clearAll(){
   document.querySelectorAll('.dot-label').forEach(el=>el.textContent='');
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.acid-seg').forEach(b=>b.classList.remove('sel'));
-  starEls.forEach(s=>s.classList.remove('lit'));
+  starEls.forEach(s=>{ s.classList.remove('lit'); s.textContent='☆'; });
   document.getElementById('starLabel').textContent='اختر تقييمك النهائي';
   // reset flavor wheel: sub-segments + outer slices
   document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>{
@@ -1875,30 +2018,42 @@ function drawRadar(svgEl, vals, color){
   const mk=(tag,attrs,txt)=>{ const el=document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); if(txt!==undefined) el.textContent=txt; return el; };
   const pt=(rv,i)=>{ const a=(i/n)*TAU-Math.PI/2; return [cx+rv*Math.cos(a), cy+rv*Math.sin(a)]; };
 
-  // grid rings
+  // grid rings — visible on dark bg
   for(let ring=1;ring<=5;ring++){
     const pts=Array.from({length:n},(_,i)=>pt(r*ring/5,i).join(',')).join(' ');
-    svgEl.appendChild(mk('polygon',{points:pts,fill:'none',stroke:'rgba(200,134,58,'+(ring===5?'0.25':'0.10')+')',  'stroke-width': ring===5?'1.5':'1'}));
+    const isOuter=ring===5;
+    svgEl.appendChild(mk('polygon',{points:pts,fill:ring%2===0?'rgba(200,134,58,0.05)':'none',stroke:'rgba(200,134,58,'+(isOuter?'0.5':'0.22')+')','stroke-width':isOuter?'1.5':'1'}));
   }
   // axis lines + labels
   for(let i=0;i<n;i++){
     const [x2,y2]=pt(r,i);
-    svgEl.appendChild(mk('line',{x1:cx,y1:cy,x2,y2,stroke:'rgba(200,134,58,0.18)','stroke-width':'1'}));
+    svgEl.appendChild(mk('line',{x1:cx,y1:cy,x2,y2,stroke:'rgba(200,134,58,0.35)','stroke-width':'1'}));
     const [lx,ly]=pt(r+18,i);
-    svgEl.appendChild(mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'9.5','font-family':'Tajawal,sans-serif',fill:'#8B5E3C'},RADAR_AXES[i]));
+    svgEl.appendChild(mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'10','font-family':'Tajawal,sans-serif',fill:'rgba(200,134,58,0.9)','font-weight':'600'},RADAR_AXES[i]));
   }
   // center dot
-  svgEl.appendChild(mk('circle',{cx,cy,r:'3',fill:'rgba(200,134,58,0.3)'}));
+  svgEl.appendChild(mk('circle',{cx,cy,r:'4',fill:'rgba(200,134,58,0.5)'}));
 
-  // data polygon — skip if all zero
+  // data polygon + numbers + animation
   const v=Array.isArray(vals)?vals:Array(n).fill(0);
   const hasData=v.some(x=>x>0);
   if(hasData){
+    const col=color||'#C8863A';
     const dpts=v.map((val,i)=>pt(r*Math.max(0,Math.min(5,val||0))/5,i).join(',')).join(' ');
-    svgEl.appendChild(mk('polygon',{points:dpts,fill:color?color.replace(')',',0.18)').replace('rgb','rgba'):'rgba(200,134,58,0.18)',stroke:color||'#C8863A','stroke-width':'2','stroke-linejoin':'round'}));
+    // wrap in animated group
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('class','radar-data-group');
+    // polygon fill
+    const poly=mk('polygon',{points:dpts,fill:col+'33',stroke:col,'stroke-width':'2.5','stroke-linejoin':'round','stroke-linecap':'round'});
+    g.appendChild(poly);
+    // clean vertex dots only
     v.forEach((val,i)=>{
-      if(val>0){ const [x,y]=pt(r*Math.min(5,val)/5,i); svgEl.appendChild(mk('circle',{cx:x,cy:y,r:'3.5',fill:color||'#C8863A'})); }
+      if(val>0){
+        const [x,y]=pt(r*Math.min(5,val)/5,i);
+        g.appendChild(mk('circle',{cx:x,cy:y,r:'4.5',fill:col}));
+      }
     });
+    svgEl.appendChild(g);
   }
 }
 
@@ -2008,7 +2163,10 @@ function buildSummary(){
 
   // ── Overall ───────────────────────────────────────────────────────
   h+='<hr class="sum-divider"><div class="sum-overall">';
-  h+=`<div class="sum-stars">${'★'.repeat(litStars)}${'☆'.repeat(5-litStars)}</div>`;
+  h+=`<div class="sum-stars-wrap">
+    <div class="sum-stars">${'★'.repeat(litStars)}${'☆'.repeat(5-litStars)}</div>
+    ${litStars>0?`<div class="sum-stars-precise"><span class="sum-precise-val">${litStars}.0</span><span class="sum-precise-denom"> / 5</span></div>`:''}
+  </div>`;
   if(starTxt) h+=`<div class="sum-verdict">${esc(starTxt)}</div>`;
   h+='</div>';
 
@@ -2068,7 +2226,7 @@ function applyState(st){
   Object.keys(st.dots||{}).forEach(g=>{ const n=st.dots[g]; document.querySelectorAll('[data-g="'+g+'"]').forEach(d=>{ d.classList.toggle('filled', parseInt(d.dataset.i)<=n); }); const lEl=document.getElementById(g+'-label'); if(lEl&&DOT_LABELS[g]) lEl.textContent=DOT_LABELS[g][n]||''; });
   const segs=[...document.querySelectorAll('.acid-seg')]; segs.forEach(x=>x.classList.remove('sel')); if(st.acidIdx>=0 && segs[st.acidIdx]) segs[st.acidIdx].classList.add('sel');
   document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',(st.chips||[]).includes(c.textContent)));
-  starEls.forEach(x=>x.classList.toggle('lit', parseInt(x.dataset.s)<=(st.stars||0)));
+  starEls.forEach(x=>{ const on=parseInt(x.dataset.s)<=(st.stars||0); x.classList.toggle('lit',on); x.textContent=on?'★':'☆'; });
   document.getElementById('starLabel').textContent = st.stars ? (starLabels[st.stars]||'') : 'اختر تقييمك النهائي';
   if(st.wheel){ document.querySelectorAll('#flavorWheel path[data-sub]').forEach(p=>{
     const on=st.wheel.includes(p.dataset.sub);
@@ -2315,7 +2473,8 @@ function loadDraft(){ try{ const d=localStorage.getItem(DRAFT_KEY); return d?JSO
 function clearDraft(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
 
 // any edit → refresh summary + autosave the draft
-function onChange(){ scheduleSummary(); scheduleDraft(); }
+let _barTimer = null;
+function onChange(){ scheduleSummary(); scheduleDraft(); if(_ratingView==='chart'){ clearTimeout(_barTimer); _barTimer=setTimeout(buildBarChart,120); } }
 
 // attach listeners ONCE
 let _listenersAttached = false;
